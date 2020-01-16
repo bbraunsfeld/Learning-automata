@@ -134,7 +134,7 @@ for line in lines:
 if len( coords ) > 0:
     print ("Found system of %d atoms." % len( coords ))
 else:
-    print "No cartesian coordinates found."
+    print ("No cartesian coordinates found.")
     exit()
 # checking freqs
 if len( freqs ) > 0:
