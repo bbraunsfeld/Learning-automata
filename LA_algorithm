@@ -1,0 +1,65 @@
+import numpy as np 
+import matplotlib.pyplot as plt 
+from numpy import random
+
+def reward(w_prev, f, x, M=-100, L=100):
+    return w_prev + (f(x)-L)/(M-L)
+
+
+
+def LA_maximum(f, a, b, r, eps, delt, lamb):
+    """
+    f,a,b   function on [a,b]
+    r       number of sub-intervals divided
+    eps     error band
+    d       threshold of action probabilities (0 < D < 1/r)
+    l       speed of convergence (0 < l < 1) 
+    """
+    interval=(b-a)/r
+    #actions:
+    a=list(zip(np.arange(a,b,interval),np.arange(a+interval,b+interval,interval)))
+    #total reward for each action:
+    w=[0 for i in range(r)]
+    #number of times each action is chosen:
+    z=[0 for i in range(r)]
+    #initialize w and z by picking each action several times:
+    pick=lambda a_i: random.uniform(a_i[0],a_i[1]) 
+    for n in range(3):
+        for i in range(r):
+            x=pick(a[i])
+            w[i]+=reward(w[i],f,x)
+            z[i]+=1
+    #d=w/z:
+    d=[i/j for i,j in zip(w,z)]
+    #intialize each p_i as 1/r (probability of chosing action i)
+    p=[1/r for i in range(r)]
+    
+    #step 4
+    while True:
+        #pick a random action according to distribution p:
+        i_=random.choice(range(r),p=p)
+        x=pick(a[i_])
+        #update w,z and d:
+        w[i_]+=reward(w[i_],f,x)
+        z[i_]+=1
+        d[i_]=w[i_]/z[i_]
+        #update p:
+        d_max=max(d)
+        m=d.index(d_max)
+        p=[(1-lamb*d_max)*i for i in p]
+        p[m]+=lamb*d_max
+        d_min=min(d)
+        l=d.index(d_min)
+        if p[l]<delt:
+            break
+            
+    #step 5
+    print(d)
+    print(p)
+    
+        
+    return
+    
+
+func=lambda x: np.cos(x/4)*(np.cos(3*x)+np.sin(6*x))
+LA_maximum(func,-30,30,10,0.05,0.01,0.4)
