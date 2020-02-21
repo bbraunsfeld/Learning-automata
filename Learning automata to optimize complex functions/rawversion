@@ -5,9 +5,114 @@ from numpy import random
 def reward(w_prev, f, x, M=-100, L=100):
     return w_prev + (f(x)-L)/(M-L)
 
+def pick(action):
+    return random.uniform(action[0],action[1]) 
 
+def length(action):
+    return action[1]-action[0]
 
-def LA_maximum(f, a, b, r, eps, delt, lamb):
+def midpoint(action):
+    return action[0]+(action[1]-action[0])/2
+
+def remove_interval(actions, w, z, d, p, l):
+    #remove the lth interval (it is considered as stable and useless for further search)
+    del actions[l] 
+    a,b=actions[-1]
+    #subdivide a remaining interval into two sub-intervals each corresponding to a new action
+    #(the total number of actions is not changed)
+    #subdividing the last interval... 
+    del actions[-1]
+    actions+=[(a,a+(b-a)/2),(a+(b-a)/2,b)]
+    #update w, z, d, p
+    del w[l]
+    del z[l]
+    del d[l]
+    del p[l]
+    #duplicating the last element since its interval now occurs twice... 
+    w.append(w[-1])
+    z.append(z[-1])
+    d.append(d[-1])
+    p.append(p[-1])
+    return actions, w, z, d, p 
+
+def find_peaks_and_valleys(dl):
+    actions_k=[]
+    gamma=[dl[i+1]-dl[i] for i in range(len(dl)-1)]
+    g_prev=gamma[0]
+    a=dl[0]
+    switch=0
+    for i in range(1,len(gamma)): 
+        g=gamma[i]
+        if g==0:
+            continue 
+        elif g*g_prev<0: 
+            #sign-switch 
+            switch+=1
+            if switch==2:
+                b=dl[i]
+                actions_k.append((a,b))
+                if len(actions_k)==1:
+                    #meaning this was the first interval to be added 
+                    #then also add (a,b) with b one index earlier to take into account the peak or valley
+                    #that could exist at the edge
+                    actions_k.append((a,dl[i-1]))
+                a=b
+        elif i==len(gamma)-1 and g*g_prev>0:
+            #even if still rising or falling, finish current interval
+            b=dl[i]
+            actions_k.append((a,b))
+        g_prev=g 
+        
+    return actions_k 
+
+def initialize_actions(a, b, r):
+    #(step 2)
+    interval=(b-a)/r
+    #actions:
+    actions=list(zip(np.arange(a,b,interval),np.arange(a+interval,b+interval,interval)))
+    return actions
+    
+def initialize_probs(f, r, actions):
+    #(step 3) intialize w,z,d,p with the actions:
+    
+    #total reward for each action:
+    w=[0 for i in range(r)]
+    #number of times each action is chosen:
+    z=[0 for i in range(r)]
+    #initialize w and z by picking each action several times:
+    for n in range(3):
+        for i in range(r):
+            x=pick(actions[i])
+            w[i]+=reward(w[i],f,x)
+            z[i]+=1
+    #d=w/z:
+    d=[i/j for i,j in zip(w,z)]
+    #intialize each p_i as 1/r (probability of chosing action i)
+    p=[1/r for i in range(r)]
+    return w, z, d, p 
+    
+def calculate_probs(f, r, actions, w, z, d, p, lamb, delt):
+    #(step 4) calculate p and d iteratively until condition is met
+    while True:
+        #pick a random action according to distribution p:
+        i_=random.choice(range(r),p=p)
+        x=pick(actions[i_])
+        #update w,z and d:
+        w[i_]+=reward(w[i_],f,x)
+        z[i_]+=1
+        d[i_]=w[i_]/z[i_]
+        #update p:
+        dmax=max(d)
+        imax=d.index(dmax)
+        p=[(1.-lamb*dmax)*i for i in p]
+        p[imax]+=lamb*dmax
+        dmin=min(d)
+        imin=d.index(dmin)
+        if p[imin]<delt:
+            break
+    return w, z, d, p, dmax, imax, dmin, imin            
+
+def find_maximum(f, a, b, r, eps, delt, lamb):
     """
     f,a,b   function on [a,b]
     r       number of sub-intervals divided
@@ -15,51 +120,81 @@ def LA_maximum(f, a, b, r, eps, delt, lamb):
     d       threshold of action probabilities (0 < D < 1/r)
     l       speed of convergence (0 < l < 1) 
     """
-    interval=(b-a)/r
-    #actions:
-    a=list(zip(np.arange(a,b,interval),np.arange(a+interval,b+interval,interval)))
-    #total reward for each action:
-    w=[0 for i in range(r)]
-    #number of times each action is chosen:
-    z=[0 for i in range(r)]
-    #initialize w and z by picking each action several times:
-    pick=lambda a_i: random.uniform(a_i[0],a_i[1]) 
-    for n in range(3):
-        for i in range(r):
-            x=pick(a[i])
-            w[i]+=reward(w[i],f,x)
-            z[i]+=1
-    #d=w/z:
-    d=[i/j for i,j in zip(w,z)]
-    #intialize each p_i as 1/r (probability of chosing action i)
-    p=[1/r for i in range(r)]
-    
-    #step 4
-    while True:
-        #pick a random action according to distribution p:
-        i_=random.choice(range(r),p=p)
-        x=pick(a[i_])
-        #update w,z and d:
-        w[i_]+=reward(w[i_],f,x)
-        z[i_]+=1
-        d[i_]=w[i_]/z[i_]
-        #update p:
-        d_max=max(d)
-        m=d.index(d_max)
-        p=[(1-lamb*d_max)*i for i in p]
-        p[m]+=lamb*d_max
-        d_min=min(d)
-        l=d.index(d_min)
-        if p[l]<delt:
+    midpointlist=[]
+    #(step 2) initialize actions on the interval
+    actions = initialize_actions(a, b, r)
+    #(step 3) initialize d and p with these actions
+    w, z, d, p = initialize_probs(f, r, actions)
+    stop=False
+    while True: 
+        back_to_step_4=False
+        if stop==True:
             break
-            
-    #step 5
-    print(d)
-    print(p)
-    
+        #(step 4) calculate d and p until condition is met
+        w, z, d, p, dmax, imax, dmin, imin = calculate_probs(f, r, actions, w, z, d, p, lamb, delt)
+        #(step 5) enhance the search in the lth interval
+        l=imin
+        al, bl = actions[l]
+        deltl = delt+(1-delt)/2 #such that 0<delt<delt_<1
+        while True:
+            #(step 2) initialize new actions in the lth interval 
+            actionsl = initialize_actions(al, bl, r)
+            #(step 3) initialize dl and pl with these actions
+            wl, zl, dl, pl = initialize_probs(f, r, actionsl)
+            #(step 4) calculate pl and dl
+            wl, zl, dl, pl, dlmax, ilmax, dlmin, ilmin = calculate_probs(f, r, actionsl, wl, zl, dl, pl, lamb, deltl)
+            #calculate average reward and variance on the lth interval
+            Md=np.mean(dl)
+            D=max([abs(i-Md) for i in dl])
+            if D<eps and dlm<dm:
+                actions, w, z, d, p = remove_interval(actions, w, z, d, p, l)
+                #go back to step 4 with updated actions etc.
+                back_to_step_4=True
+                break
+            else: 
+                #(step 6) lth interval is considered as unstable
+                #checking the signs of the values to determine the peaks and valleys
+                actionsk = find_peaks_and_valleys(dl)
+                rk=len(actionsk)
+                #repeat steps 3 and 4 for calculating p and d
+                wk, zk, dk, pk = initialize_probs(f, rk, actionsk)
+                wk, zk, dk, pk, dkmax, ikmax, dkmin, ikmin = calculate_probs(f, rk, actionsk, wk, zk, dk, pk, lamb, delt)
+                alm=actionsk[ikmax] #action corresponding to the largest d
+                #replace the lth interval by the subinterval of alm:
+                actions[l]=alm
+                if length(alm)<eps:
+                    #(step 7) adding the midpoint of the lth interval to a list and remove this interval
+                    mp=midpoint(alm)
+                    midpointlist.append(mp)
+                    actions, w, z, d, p = remove_interval(actions, w, z, d, p, l)
+                    r-=1
+                    #if the number of remaining intervals is zero, then select the global optimum from the list and stop
+                    if len(actions)==0:
+                        back_to_step_4=True
+                        stop=True
+                        break
+                    else: 
+                        back_to_step_4=True
+                        break     
+                else: 
+                    #go back to step 4 with updated actions etc.
+                    back_to_step_4=True
+                    break
+                
+        if back_to_step_4==True:
+            break
         
-    return
+            
+    return max(midpointlist)
     
 
 func=lambda x: np.cos(x/4)*(np.cos(3*x)+np.sin(6*x))
-LA_maximum(func,-30,30,10,0.05,0.01,0.4)
+maximum=find_maximum(func,-10,10,10,0.05,0.01,0.4)
+
+xvals=np.arange(-10,10,0.1)
+plt.figure(figsize=(15,3))
+plt.plot(xvals,list(map(func,xvals)))
+plt.plot(xvals, np.zeros(xvals.shape),color='black',linewidth=1)
+plt.plot(maximum,0,marker="*",color='red')
+
+plt.show()
