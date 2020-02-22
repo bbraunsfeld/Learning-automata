@@ -2,49 +2,48 @@ from math import sin
 from matplotlib import pylab
 from pylab import *
 
-def peakdet(v, thresh):
-    maxthresh = []
-    minthresh = []
+def peakdet(v):
     peaks = []
     valleys = []
-
+    together = []
+    
+    
     for x, y in v:
-        if y > thresh:
-            maxthresh.append((x, y))
-        elif y < -thresh:
-            minthresh.append((x, y))
-
-    for x, y in maxthresh:
         try:
             if (v[x - 1][1] < y) & (v[x + 1][1] < y):
                 peaks.append((x, y))
-        except Exception:
-            pass
-
-    for x, y in minthresh:
-        try:
-            if (v[x - 1][1] > y) & (v[x + 1][1] > y):
+                together.append((x, y))                
+            elif (v[x - 1][1] > y) & (v[x + 1][1] > y):
                 valleys.append((x, y))
+                together.append((x, y))
         except Exception:
             pass
-
-    return peaks, valleys
+    
+    together.append(v[-1])
+        
+    interval_peaks=[peaks[i+1][0]-peaks[i][0] for i in range(len(peaks)-1)]
+    print (len(peaks))
+    print ("peak_inteval",interval_peaks)
+    interval_valleys=[valleys[i+1][0]-valleys[i][0] for i in range(len(valleys)-1)]
+    print ("valley_int",interval_valleys)
+    print (len(valleys))
+    interval_together=[together[i+1][0]-together[i][0] for i in range(len(together)-1)]
+    print ("valley_int",interval_together)
+    print (len(together))
+    
+    return peaks, valleys, together
     
     
-#######Test of the function
-
 # input signal
 t = array(range(100))
 series = 0.3 * sin(t) + 0.7 * cos(2 * t) - 0.5 * sin(1.2 * t)
 
 arr = [*zip(t, series)]  # create a list of tuples where the tuples represent the (x, y) values of the function
-thresh = 0
 
-peaks, valleys = peakdet(arr, thresh)
+peaks, valleys, together = peakdet(arr)
 
-scatter([x for x, y in peaks], [y for x, y in peaks], color = 'red')
-scatter([x for x, y in valleys], [y for x, y in valleys], color = 'blue')
-plot(t, 100 * [thresh], color='green', linestyle='--', dashes=(5, 3))
-plot(t, 100 * [-thresh], color='green', linestyle='--', dashes=(5, 3))
+#scatter([x for x, y in peaks], [y for x, y in peaks], color = 'red')
+#scatter([x for x, y in valleys], [y for x, y in valleys], color = 'blue')
+scatter([x for x, y in together], [y for x, y in together], color = 'green')
 plot(t, series, 'k')
 show()
