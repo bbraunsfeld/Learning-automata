@@ -111,7 +111,7 @@ def calculate_probs(f, r, actions, w, z, d, p, lamb, delt):
       
         #pick a random action according to distribution p:
         i_=random.choice(range(r),p=p)
-        x=pick(actions[i_])
+        x=random.choice(actions[i_])
         #update w,z and d:
         w[i_]+=avg_reward(f,actions[i_])
         z[i_]+=1
