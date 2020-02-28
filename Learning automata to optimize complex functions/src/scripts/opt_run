@@ -3,6 +3,7 @@ import os
 import logging
 from opt.utils import (get_function,ScriptError,setup_run)
 from opt.utils.script_utils.parsing import build_parser
+from opt.algorithms.maximum import *
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
