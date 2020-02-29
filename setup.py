@@ -13,7 +13,7 @@ setup(
     version="0.0.1",
     author="Daan Scheepens, Johannes Stangl, Benedict Braunsfeld",
     email="b.braunsfeld@gmail.com",
-    url="",
+    url="https://github.com/bbraunsfeld/Learning-automata.git",
     packages=find_packages("src"),
     scripts=[
         "src/scripts/spk_ase.py",
