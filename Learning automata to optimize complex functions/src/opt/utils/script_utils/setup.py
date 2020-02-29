@@ -1,6 +1,7 @@
 import os
 import logging
 from shutil import rmtree
+import opt
 
 __all__ = ["setup_run"]
 
