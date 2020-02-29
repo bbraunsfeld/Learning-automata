@@ -14,6 +14,6 @@ def get_parameter(args, logging=None):
         r = args.subint
         eps = args.error
         delt = args.delta
-        lamb = args.lambda
+        lamb = args.lamb
         
         return a,b,r,eps,delt,lamb
