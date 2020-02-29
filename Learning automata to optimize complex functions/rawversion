@@ -149,10 +149,10 @@ def find_maximum(f, a, b, r, eps, delt, lamb):
             midpointlist.append(midpoint(actions[0]))
             break
             
-        xvals=np.arange(-2,2,0.1)
+        xvals=np.arange(a,b,0.1)
         plt.plot(xvals,list(map(f,xvals)))
-        for a in actions:
-            plt.plot([a[0],a[1]],[0,0])
+        for act in actions:
+            plt.plot([act[0],act[1]],[0,0])
         plt.show()
         
         #(step 3) initialize d and p with these actions
@@ -161,7 +161,7 @@ def find_maximum(f, a, b, r, eps, delt, lamb):
         w, z, d, p, dmax, imax, dmin, imin = calculate_probs(f, r, actions, w, z, d, p, lamb, delt)
         dround=[round(d_,1) for d_ in p]
         print(dround)
-        plt.plot(np.linspace(-2,2,r),[d_ for d_ in d],marker='*')
+        plt.plot(np.linspace(a,b,r),[d_ for d_ in d],marker='*')
         plt.show()
         plt.close()
         
@@ -189,9 +189,9 @@ def find_maximum(f, a, b, r, eps, delt, lamb):
         D=max([abs(i-Md) for i in dl])
         if D<eps and dlmin<dmin:
             actions = remove_interval(actions, l, duplicate=True)
-            for _, a in enumerate(actions):
-                if length(a)<eps:
-                    midpointlist.append(midpoint(a))
+            for _, act in enumerate(actions):
+                if length(act)<eps:
+                    midpointlist.append(midpoint(act))
                     del actions[_]
                     r-=1
                     if len(actions)==0:
@@ -249,15 +249,24 @@ def find_maximum(f, a, b, r, eps, delt, lamb):
     return midpointlist[imax]
     
 
-func=lambda x: np.cos(x/4)*(np.cos(3*x)+np.sin(6*x))
-maximum=find_maximum(func,-2,2,20,0.05,0.01,0.01)
+#Parameters to put into the algorithm
+
+func=lambda x: np.cos(x/4)*(np.cos(3*x)+np.sin(6*x)) #function to find the global maximum for
+a = -2      #left interval boundary to search in
+b = 2       #right interval boundary to search in
+r = 20      #number of sub-intervals divided
+eps = 0.05  #error band
+delt = 0.01 #threshold of action probability (0<delt<1/r)
+lamb = 0.01 #speed of convergence (0<k<1)
+
+
+maximum=find_maximum(func, a, b, r, eps, 0.01, 0.01)
 
 
 
-xvals=np.arange(-2,2,0.1)
+xs=np.arange(a,b,0.1)
 plt.figure(figsize=(15,3))
-plt.plot(xvals,list(map(func,xvals)))
-plt.plot(xvals, np.zeros(xvals.shape),color='black',linewidth=1)
+plt.plot(xs,list(map(func,xs)))
+plt.plot(xs, np.zeros(xs.shape),color='black',linewidth=1)
 plt.plot(maximum,0,'.',marker="*",color='red')
-
 plt.show()
