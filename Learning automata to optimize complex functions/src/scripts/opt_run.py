@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import logging
-from opt.utils import (get_function,get_parameter,ScriptError,setup_run,picture_results)
+from opt.utils import (get_function,get_parameter,ScriptError,setup_run,picture_result)
 from opt.utils.script_utils.parsing import build_parser
 from opt.algorithms.maximum import *
 
