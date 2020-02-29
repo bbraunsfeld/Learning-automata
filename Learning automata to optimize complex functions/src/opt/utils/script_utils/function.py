@@ -1,4 +1,8 @@
-def get_function(args, logging=None):
+import numpy as np
+import logging
+
+
+def get_function(args, logging=logging):
     """
     Get function from arguments.
     Args:
@@ -9,8 +13,8 @@ def get_function(args, logging=None):
     """
     if args.function == "custom":
         if logging:
-            logging.info("custom function will be loaded...")
-        func = args.func
-        func = "lambda x: " + func
+            logging.info("Custom function will be loaded ...")
+            
+        func = lambda x: np.cos(x/4)*(np.cos(3*x)+np.sin(6*x))
         
         return func
