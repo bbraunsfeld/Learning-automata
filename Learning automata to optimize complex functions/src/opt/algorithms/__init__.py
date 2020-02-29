@@ -1,1 +1,1 @@
-from maximum import *
+from .maximum import *
