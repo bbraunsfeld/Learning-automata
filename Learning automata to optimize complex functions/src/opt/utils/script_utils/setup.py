@@ -53,5 +53,10 @@ def setup_run(args):
 
         # load arguments
         multi_args = opt.utils.opt_utils.read_from_json(jsonpath)
+        
+    if (getsizeof(single_args)==0):
+        mode_args = multi_args
+    else:
+        mode_args = single_args
 
-    return single_args, multi_args
+    return mode_args
