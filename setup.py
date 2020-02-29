@@ -14,11 +14,11 @@ setup(
     author="Daan Scheepens, Johannes Stangl, Benedict Braunsfeld",
     email="b.braunsfeld@gmail.com",
     url="https://github.com/bbraunsfeld/Learning-automata",
-    packages=find_packages("src"),
+    packages=find_packages("Learning automata to optimize complex functions/src"),
     scripts=[
         "src/scripts/opt_run",
     ],
-    package_dir={"": "src"},
+    package_dir={"": "Learning automata to optimize complex functions/src"},
     python_requires=">=3.6",
     install_requires=[
         "numpy",
