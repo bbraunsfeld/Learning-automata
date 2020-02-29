@@ -86,7 +86,7 @@ def get_model_parsers():
     )
     
     min_parser.add_argument(
-        "--lamda",
+        "--lambda",
         help="Speed of convergence (0 < k < 1) (default: %(default)s)",
         type=float,
         default=0.4,
