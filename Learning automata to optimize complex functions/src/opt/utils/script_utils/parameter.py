@@ -1,4 +1,6 @@
-def get_parameter(args, logging=None):
+import logging
+
+def get_parameter(args, logging=logging):
     """
     Get parameter from arguments.
     Args:
