@@ -86,7 +86,7 @@ def get_model_parsers():
     )
     
     min_parser.add_argument(
-        "--lambda",
+        "--lamb",
         help="Speed of convergence (0 < k < 1) (default: %(default)s)",
         type=float,
         default=0.4,
@@ -123,7 +123,7 @@ def get_model_parsers():
     )
     
     max_parser.add_argument(
-        "--lamda",
+        "--lamb",
         help="Speed of convergence (0 < k < 1) (default: %(default)s)",
         type=float,
         default=0.4,
