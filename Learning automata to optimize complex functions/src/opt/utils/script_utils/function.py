@@ -1,7 +1,3 @@
-import numpy as np
-import os
-
-
 def get_function(args, logging=None):
     """
     Get function from arguments.
