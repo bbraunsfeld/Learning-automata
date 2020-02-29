@@ -13,31 +13,19 @@ setup(
     version="0.0.1",
     author="Daan Scheepens, Johannes Stangl, Benedict Braunsfeld",
     email="b.braunsfeld@gmail.com",
-    url="https://github.com/bbraunsfeld/Learning-automata.git",
+    url="https://github.com/bbraunsfeld/Learning-automata",
     packages=find_packages("src"),
     scripts=[
-        "src/scripts/spk_ase.py",
-        "src/scripts/spk_load.py",
-        "src/scripts/spk_md.py",
-        "src/scripts/spk_parse.py",
-        "src/scripts/spk_run.py",
+        "src/scripts/opt_run",
     ],
     package_dir={"": "src"},
     python_requires=">=3.6",
     install_requires=[
-        "torch>=1.1",
         "numpy",
-        "ase>=3.18",
-        "h5py",
-        "tensorboardX",
-        "tqdm",
-        "pyyaml",
+        "matplotlib",
+        "sys",
     ],
-    extras_require={"test": ["pytest", "sacred", "pytest-console-scripts"]},
-    license="MIT",
-    description="SchNetPack - Deep Neural Networks for Atomistic Systems",
+    description="Optimizer - Learning automata for optimization of continuous complex functions",
     long_description="""
-        SchNetPack aims to provide accessible atomistic neural networks that can be
-        trained and applied out-of-the-box, while still being extensible to custom 
-        atomistic architectures""",
+        This optimizer is the reproduction of the paper mentioned in the docs and is part of a project at the university""",
 )
