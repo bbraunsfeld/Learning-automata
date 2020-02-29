@@ -136,8 +136,8 @@ def get_function_parsers():
     # functions parsers
     function_parser = argparse.ArgumentParser(add_help=False)
     function_parser.add_argument(
-        "--funct",
-        help="Function that is used (example: lamda x: np.sin(x) + np.cos(0.5*x))",
+        "--func",
+        help="Function that is used (example:  /'np.sin(x) + np.cos(0.5*x)/')",
         type=str,
         default=None,
     )
