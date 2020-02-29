@@ -16,14 +16,13 @@ setup(
     url="https://github.com/bbraunsfeld/Learning-automata",
     packages=find_packages("Learning automata to optimize complex functions/src"),
     scripts=[
-        "src/scripts/opt_run",
+        "Learning automata to optimize complex functions/src/scripts/opt_run",
     ],
     package_dir={"": "Learning automata to optimize complex functions/src"},
     python_requires=">=3.6",
     install_requires=[
         "numpy",
         "matplotlib",
-        "sys",
     ],
     description="Optimizer - Learning automata for optimization of continuous complex functions",
     long_description="""
