@@ -15,5 +15,6 @@ def get_function(args, logging=None):
         if logging:
             logging.info("custom function will be loaded...")
         func = args.func
+        func = "lambda x: " + func
         
         return func
