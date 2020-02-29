@@ -16,7 +16,7 @@ setup(
     url="https://github.com/bbraunsfeld/Learning-automata",
     packages=find_packages("Learning automata to optimize complex functions/src"),
     scripts=[
-        "Learning automata to optimize complex functions/src/scripts/opt_run",
+        "Learning automata to optimize complex functions/src/scripts/opt_run.py",
     ],
     package_dir={"": "Learning automata to optimize complex functions/src"},
     python_requires=">=3.6",
