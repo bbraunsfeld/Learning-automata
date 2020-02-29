@@ -1,8 +1,9 @@
 import os
-import sys
+import opt
 import logging
 from shutil import rmtree
-import opt
+from sys import getsizeof
+
 
 __all__ = ["setup_run"]
 
