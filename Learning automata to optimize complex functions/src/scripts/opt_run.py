@@ -43,9 +43,6 @@ def main(args):
             raise ScriptError("Unknown mode: {}".format(args.model))
     
     
-    
-    
-    
 if __name__ == "__main__":
     parser = build_parser()
     args = parser.parse_args()
