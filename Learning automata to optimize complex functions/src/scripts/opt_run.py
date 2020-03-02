@@ -45,14 +45,13 @@ def main(args):
             minimum=find_optimum(optim[0],func,a,b,r,eps,delt,lamb)
             logging.info("Minimum found at x = %s" %(minimum))
             
-            print ("Minimum at x = ", minimum)
-            picture_result(optim[0],func,a,b,minimum,args)
-            
             logging.info("Searching for maximum...")
             maximum=find_optimum(optim[1], func,a,b,r,eps,delt,lamb)
             logging.info("Maximum found at x = %s" %(maximum))
 
-            print ("Maximum at", maximum)
+            print ("Minimum at x = ", minimum)
+            print ("Maximum at x =", maximum)
+            picture_result(optim[0],func,a,b,minimum,args)
             picture_result(optim[1],func,a,b,maximum,args)
             picture_results(func,a,b,minimum,maximum,args)
             
