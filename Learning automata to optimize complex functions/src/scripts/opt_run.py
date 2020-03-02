@@ -38,8 +38,8 @@ def main(args):
             minimum=find_optimum(optim,func,a,b,r,eps,delt,lamb)
             logging.info("Minimum found at x = %s" %(minimum))
             
-            print ("Minimum at x = ", maximum)
-            picture_result(func,a,b,maximum,args)
+            print ("Minimum at x = ", minimum)
+            picture_result(func,a,b,minimum,args)
             
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
