@@ -54,7 +54,7 @@ def main(args):
 
             print ("Maximum at", maximum)
             picture_result(optim[1],func,a,b,maximum,args)
-            picture_results(args.model,func,a,b,minimum,maximum,args)
+            picture_results(func,a,b,minimum,maximum,args)
             
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
