@@ -9,7 +9,7 @@ def get_parameter(args, logging=logging):
     Returns:
         function
     """
-    if args.model == "min" or args.model == "max":
+    if args.model == "min" or args.model == "max" or args.model == "minmax":
         if logging:
             logging.info("Parameter will be loaded...")
         a,b=args.interval
