@@ -57,7 +57,7 @@ def get_model_parsers():
     model_parser = argparse.ArgumentParser(add_help=False)
     min_parser = argparse.ArgumentParser(add_help=False, parents=[model_parser])    
     min_parser.add_argument(
-        "--interval",
+        "--interval", "--i",
         help="Range that is examined",
         type=int,
         nargs=2,
@@ -65,28 +65,28 @@ def get_model_parsers():
     )
     
     min_parser.add_argument(
-        "--subint",
+        "--subint", "--si",
         help="Number of sub-intervals divided (default: %(default)s)",
         type=int,
         default=5,
     )
     
     min_parser.add_argument(
-        "--error",
+        "--error", "--e",
         help="Giving the error band (default: %(default)s) according to the required precision or the required computation cost",
         type=float,
         default=0.05,
     )
     
     min_parser.add_argument(
-        "--delta",
+        "--delta", "--d",
         help="Threshold of action probabilities (0 < D < 1/r) (default: %(default)s)",
         type=float,
         default=0.01,
     )
     
     min_parser.add_argument(
-        "--lamb",
+        "--lamb", "--l",
         help="Speed of convergence (0 < k < 1) (default: %(default)s)",
         type=float,
         default=0.4,
@@ -94,7 +94,7 @@ def get_model_parsers():
     
     max_parser = argparse.ArgumentParser(add_help=False, parents=[model_parser])    
     max_parser.add_argument(
-        "--interval",
+        "--interval", "--i",
         help="Range that is examined",
         type=int,
         nargs=2,
@@ -102,28 +102,28 @@ def get_model_parsers():
     )
     
     max_parser.add_argument(
-        "--subint",
+        "--subint", "--si",
         help="Number of sub-intervals divided (default: %(default)s)",
         type=int,
         default=5,
     )
     
     max_parser.add_argument(
-        "--error",
+        "--error", "--e",
         help="Giving the error band (default: %(default)s) according to the required precision or the required computation cost",
         type=float,
         default=0.05,
     )
     
     max_parser.add_argument(
-        "--delta",
+        "--delta", "--d",
         help="Threshold of action probabilities (0 < D < 1/r) (default: %(default)s)",
         type=float,
         default=0.01,
     )
     
     max_parser.add_argument(
-        "--lamb",
+        "--lamb", "--l",
         help="Speed of convergence (0 < k < 1) (default: %(default)s)",
         type=float,
         default=0.4,
@@ -136,7 +136,7 @@ def get_function_parsers():
     # functions parsers
     function_parser = argparse.ArgumentParser(add_help=False)
     function_parser.add_argument(
-        "--func",
+        "--func", "--f",
         help="Function that is used (example:  /'np.sin(x) + np.cos(0.5*x)/')",
         type=str,
         default=None,
