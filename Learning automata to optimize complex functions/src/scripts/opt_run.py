@@ -3,7 +3,7 @@ import os
 import logging
 from opt.utils import (get_function,get_parameter,ScriptError,setup_run,picture_result)
 from opt.utils.script_utils.parsing import build_parser
-from opt.algorithms.maximum import *
+from opt.algorithms.optimizer import *
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
@@ -29,7 +29,7 @@ def main(args):
             logging.info("Maximum found at x = %s" %(maximum))
 
             print ("Maximum at", maximum)
-            picture_result(func,a,b,maximum,args)
+            picture_result(optim,func,a,b,maximum,args)
             
   
         elif args.model == "min":
@@ -39,7 +39,7 @@ def main(args):
             logging.info("Minimum found at x = %s" %(minimum))
             
             print ("Minimum at x = ", minimum)
-            picture_result(func,a,b,minimum,args)
+            picture_result(optim,func,a,b,minimum,args)
             
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
