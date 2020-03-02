@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import logging
-from opt.utils import (get_function,get_parameter,ScriptError,setup_run,picture_result)
+from opt.utils import (get_function,get_parameter,ScriptError,setup_run,picture_result,picture_results)
 from opt.utils.script_utils.parsing import build_parser
 from opt.algorithms.optimizer import *
 
@@ -54,6 +54,7 @@ def main(args):
 
             print ("Maximum at", maximum)
             picture_result(optim[1],func,a,b,maximum,args)
+            picture_results(args.model,func,a,b,minimum,maximum,args)
             
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
