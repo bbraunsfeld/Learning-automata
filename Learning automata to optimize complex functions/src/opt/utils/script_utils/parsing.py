@@ -130,7 +130,44 @@ def get_model_parsers():
     )
     
     
-    return model_parser, min_parser, max_parser 
+    minmax_parser = argparse.ArgumentParser(add_help=False, parents=[model_parser])    
+    minmax_parser.add_argument(
+        "--interval", "--i",
+        help="Range that is examined",
+        type=int,
+        nargs=2,
+        default=[None, None],
+    )
+    
+    minmax_parser.add_argument(
+        "--subint", "--r",
+        help="Number of sub-intervals divided (default: %(default)s)",
+        type=int,
+        default=5,
+    )
+    
+    minmax_parser.add_argument(
+        "--error", "--e",
+        help="Giving the error band (default: %(default)s) according to the required precision or the required computation cost",
+        type=float,
+        default=0.05,
+    )
+    
+    minmax_parser.add_argument(
+        "--delta", "--d",
+        help="Threshold of action probabilities (0 < D < 1/r) (default: %(default)s)",
+        type=float,
+        default=0.01,
+    )
+    
+    minmax_parser.add_argument(
+        "--lamb", "--l",
+        help="Speed of convergence (0 < k < 1) (default: %(default)s)",
+        type=float,
+        default=0.4,
+    )
+    
+    return model_parser, min_parser, max_parser, minmax_parser 
 
 def get_function_parsers():
     # functions parsers
@@ -149,7 +186,7 @@ def get_function_parsers():
 def build_parser():
     #get parser
     mode_parser, json_parser, single_parser, multi_parser = get_mode_parsers()
-    model_parser, min_parser, max_parser = get_model_parsers()
+    model_parser, min_parser, max_parser, minmax_parser = get_model_parsers()
     function_parser = get_function_parsers()
     
     #subparser
@@ -169,6 +206,7 @@ def build_parser():
     # model
     min_subparser = single_subparsers.add_parser("min", help="Min help")
     max_subparser = single_subparsers.add_parser("max", help="Max help")
+    minmax_subparser = single_subparsers.add_parser("minmax", help="Max help")
     
     # min
     min_subparsers = min_subparser.add_subparsers(
@@ -188,6 +226,17 @@ def build_parser():
         "custom",
         help="Function help",
         parents=[single_parser, max_parser, function_parser],
+    )
+    
+    
+    # minmax
+    minmax_subparsers = minmax_subparser.add_subparsers(
+        dest="function", help="function specific arguments"
+    )
+    minmax_subparsers.add_parser(
+        "custom",
+        help="Function help",
+        parents=[single_parser, minmax_parser, function_parser],
     )
     
     return mode_parser
