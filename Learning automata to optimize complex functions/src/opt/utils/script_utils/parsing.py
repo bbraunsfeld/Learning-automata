@@ -65,7 +65,7 @@ def get_model_parsers():
     )
     
     min_parser.add_argument(
-        "--subint", "--si",
+        "--subint", "--r",
         help="Number of sub-intervals divided (default: %(default)s)",
         type=int,
         default=5,
@@ -102,7 +102,7 @@ def get_model_parsers():
     )
     
     max_parser.add_argument(
-        "--subint", "--si",
+        "--subint", "--r",
         help="Number of sub-intervals divided (default: %(default)s)",
         type=int,
         default=5,
