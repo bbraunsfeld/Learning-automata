@@ -24,3 +24,4 @@ def picture_results(f,a,b,minimum,maximum,args):
     plt.axvline(x=minimum,ls='--',color='red')
     plt.plot(maximum,0,'.',marker="*",color='red')
     plt.axvline(x=maximum,ls='--',color='red')
+    plt.savefig(args.path + "/minmax.eps")
