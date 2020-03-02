@@ -24,7 +24,8 @@ def main(args):
     if args.mode == "single":
         if args.model == "max":
             logging.info("Searching for maximum...")
-            maximum=find_maximum(func,a,b,r,eps,delt,lamb)
+            optim = 'max'
+            maximum=find_maximum(optim, func,a,b,r,eps,delt,lamb)
             logging.info("Maximum found at x = %s" %(maximum))
 
             print ("Maximum at", maximum)
@@ -33,7 +34,8 @@ def main(args):
   
         elif args.model == "min":
             logging.info("Searching for minimum...")
-            minimum=find_minimum(func,a,b,r,eps,delt,lamb)
+            optim = 'min'
+            minimum=find_minimum(optim,func,a,b,r,eps,delt,lamb)
             logging.info("Minimum found at x = %s" %(minimum))
             
             print ("Minimum at x = ", maximum)
