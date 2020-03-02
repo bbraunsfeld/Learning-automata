@@ -12,5 +12,5 @@ def picture_result(optim,f,a,b,optimum,args):
     plt.axvline(x=optimum,ls='--',color='red')
     if optim == 'max':
         plt.savefig(args.path + "/maximum.eps")
-    else optim == 'min':
+    elif optim == 'min':
         plt.savefig(args.path + "/minimum.eps")
