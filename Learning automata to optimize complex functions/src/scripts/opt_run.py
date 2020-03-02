@@ -10,7 +10,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 def main(args):
     # setup
     mode_args = setup_run(args)
-    logging.info("Steup...")
+    logging.info("Setup...")
     #get function
     func=get_function(mode_args)
     print (func)
@@ -24,22 +24,20 @@ def main(args):
     if args.mode == "single":
         if args.model == "max":
             logging.info("Searching for maximum...")
-            optim = 'max'
-            maximum=find_optimum(optim, func,a,b,r,eps,delt,lamb)
+            maximum=find_optimum(args.model, func,a,b,r,eps,delt,lamb)
             logging.info("Maximum found at x = %s" %(maximum))
 
             print ("Maximum at", maximum)
-            picture_result(optim,func,a,b,maximum,args)
+            picture_result(args.model,func,a,b,maximum,args)
             
   
         elif args.model == "min":
             logging.info("Searching for minimum...")
-            optim = 'min'
-            minimum=find_optimum(optim,func,a,b,r,eps,delt,lamb)
+            minimum=find_optimum(args.model,func,a,b,r,eps,delt,lamb)
             logging.info("Minimum found at x = %s" %(minimum))
             
             print ("Minimum at x = ", minimum)
-            picture_result(optim,func,a,b,minimum,args)
+            picture_result(args.model,func,a,b,minimum,args)
             
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
