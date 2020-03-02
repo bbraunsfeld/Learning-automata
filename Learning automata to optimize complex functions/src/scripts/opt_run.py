@@ -39,6 +39,22 @@ def main(args):
             print ("Minimum at x = ", minimum)
             picture_result(args.model,func,a,b,minimum,args)
             
+        elif args.model == "minmax":
+            logging.info("Searching for minimum...")
+            optim = ["min","max"]
+            minimum=find_optimum(optim[0],func,a,b,r,eps,delt,lamb)
+            logging.info("Minimum found at x = %s" %(minimum))
+            
+            print ("Minimum at x = ", minimum)
+            picture_result(optim[0],func,a,b,minimum,args)
+            
+            logging.info("Searching for maximum...")
+            maximum=find_optimum(optim[1], func,a,b,r,eps,delt,lamb)
+            logging.info("Maximum found at x = %s" %(maximum))
+
+            print ("Maximum at", maximum)
+            picture_result(optim[1],func,a,b,maximum,args)
+            
         else:
             raise ScriptError("Unknown mode: {}".format(args.model))
     
